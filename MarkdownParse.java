@@ -16,15 +16,23 @@ public class MarkdownParse {
                 int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
                 int openParen = markdown.indexOf("(", nextCloseBracket);
                 int closeParen = markdown.indexOf(")", openParen);
+                // this if statement checks if each of the
+                // brackets and parentheses exist
                 if (nextOpenBracket == -1 || nextCloseBracket == -1 || openParen == -1 || closeParen == -1) {
                     currentIndex++;
+                    continue;
+                }
+                // making sure nothing is in between the ']' and the '('
+                if (nextCloseBracket != openParen - 1) {
+                    currentIndex = closeParen + 1;
                     continue;
                 }
                 try {
                     if (!(markdown.charAt(nextOpenBracket-1) == '!')) {
                         toReturn.add(markdown.substring(openParen + 1, closeParen));
                     } 
-                }catch(Exception e){
+                }
+                catch(IndexOutOfBoundsException e) {
                     currentIndex = nextOpenBracket+1;
                      continue;}
                    
@@ -32,7 +40,7 @@ public class MarkdownParse {
                 currentIndex = closeParen + 1;
             }
         }
-            return toReturn;
+        return toReturn;
     }
     public static void main(String[] args) throws IOException {
 		Path fileName = Path.of(args[0]);
