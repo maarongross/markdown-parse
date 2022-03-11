@@ -6,41 +6,10 @@ import java.util.ArrayList;
 
 public class MarkdownParse {
     public static ArrayList<String> getLinks(String markdown) {
-        ArrayList<String> toReturn = new ArrayList<>();
-        // find the next [, then find the ], then find the (, then take up to
-        // the next )
-        int currentIndex = 0;
-        if (markdown.contains("[") && markdown.contains("]") && markdown.contains("(") && markdown.contains(")")) {
-            while(currentIndex < markdown.length()) {
-                int nextOpenBracket = markdown.indexOf("[", currentIndex);
-                int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
-                int openParen = markdown.indexOf("(", nextCloseBracket);
-                int closeParen = markdown.indexOf(")", openParen);
-                // this if statement checks if each of the
-                // brackets and parentheses exist
-                if (nextOpenBracket == -1 || nextCloseBracket == -1 || openParen == -1 || closeParen == -1) {
-                    currentIndex++;
-                    continue;
-                }
-                // making sure nothing is in between the ']' and the '('
-                if (nextCloseBracket != openParen - 1) {
-                    currentIndex = closeParen + 1;
-                    continue;
-                }
-                try {
-                    if (!(markdown.charAt(nextOpenBracket-1) == '!')) {
-                        toReturn.add(markdown.substring(openParen + 1, closeParen));
-                    } 
-                }
-                catch(IndexOutOfBoundsException e) {
-                    currentIndex = nextOpenBracket+1;
-                     continue;}
-                   
-                
-                currentIndex = closeParen + 1;
-            }
-        }
-        return toReturn;
+        ArrayList<String> links = new ArrayList<>();
+        links.add(link.getDestination());
+        visitChildren(link);
+        return links;
     }
     public static void main(String[] args) throws IOException {
 		Path fileName = Path.of(args[0]);
@@ -49,3 +18,7 @@ public class MarkdownParse {
         System.out.println(links);
     }
 }
+
+
+
+//new comment
